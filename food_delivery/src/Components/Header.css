@@ -1,0 +1,71 @@
+.Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffb070; /* Bright background */
+    padding: 20px 50px; /* Adds space around content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    font-family: 'Arial', sans-serif;
+}
+  
+.Header img {
+    width: 60px;
+    height: auto;
+    margin-right: 20px;
+}
+  
+.Header h2 {
+    margin: 0;
+    color: #0b6457; /* Dark text color */
+    font-size: x-large;
+}
+  
+.Header nav {
+    flex-grow: 1;
+    text-align: right;
+}
+  
+.Header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end; /* Aligns the links to the right */
+}
+
+.Header ul li {
+    display: inline;
+    margin-left: 30px;
+}
+  
+.Header ul li a {
+    text-decoration: none;
+    color: #148c5e; /* Dark purple for links */
+    font-size: 1.1rem;
+    transition: color 0.3s ease-in-out; /* Smooth color transition */
+}
+  
+.Header ul li a:hover {
+    color: #50b0ff; /* Change link color on hover */
+}
+  
+@media (max-width: 768px) {
+    .Header {
+        flex-direction: column;
+        align-items: center; /* Center content on smaller screens */
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .Header ul {
+        margin-top: 15px;
+        flex-direction: column; /* Stack links vertically */
+        align-items: center;
+    }
+  
+    .Header ul li {
+        display: block;
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}
