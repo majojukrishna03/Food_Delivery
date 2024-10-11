@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './ContactUs.css'; 
-import Header from './Components/Header';
 import Footer from './Components/Footer';
 
 const ContactUs = () => {
