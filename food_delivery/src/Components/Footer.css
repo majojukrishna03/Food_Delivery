@@ -3,19 +3,20 @@ footer {
     padding: 20px;
     text-align: center;
     font-family: 'Arial', sans-serif;
-    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1); /* Adds a shadow effect */
-    /* margin-top: 50px; Spacing from the content above */
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.064); /* Adds a shadow effect */
+    background-color: #ffb070; 
     border-top: 3px solid #ff7f50; /* Separation line on top */
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: auto;
 }
 
 footer h3 {
-    font-size: 1.2em;
     color: #333;
-    margin-bottom: 15px;
 }
 
 footer ul {
-    list-style: none;
     padding: 0;
 }
 
@@ -27,7 +28,6 @@ footer ul {
 .footer-links a {
     text-decoration: none;
     color: #5a189a;
-    font-weight: bold;
 }
 
 .footer-links a:hover {

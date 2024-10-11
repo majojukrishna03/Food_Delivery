@@ -6,6 +6,7 @@
     padding: 20px 50px; /* Adds space around content */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     font-family: 'Arial', sans-serif;
+    
 }
   
 .Header img {
@@ -36,18 +37,28 @@
 .Header ul li {
     display: inline;
     margin-left: 30px;
+    color: #148c5e; /* green color for links */
 }
   
 .Header ul li a {
     text-decoration: none;
-    color: #148c5e; /* Dark purple for links */
-    font-size: 1.1rem;
-    transition: color 0.3s ease-in-out; /* Smooth color transition */
+    color: #148c5e; /* green color for links */
+    /* transition: color 0.3s ease-in-out; Smooth color transition */
 }
   
 .Header ul li a:hover {
     color: #50b0ff; /* Change link color on hover */
 }
+
+.search-bar {
+    width: 700px;
+    max-width: 100%;
+    padding: 8px;
+    margin:  0  40px 0; /* Adjust margins as needed */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
   
 @media (max-width: 768px) {
     .Header {
