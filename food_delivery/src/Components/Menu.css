@@ -1,0 +1,143 @@
+/* Styles for the MenuList component */
+
+.header-div {
+  text-align: center;
+  border-top: 3px solid #ff7f50; /* Matches border style */
+  background-color: #96b6ef; /* Same background as RestaurantList */
+}
+
+/* Container that holds all menu item cards */
+.menu-list {
+  display: flex; /* Enables Flexbox */
+  justify-content: space-around; /* Adds space between cards */
+  padding: 20px; /* Adds space around the entire list */
+  flex-wrap: wrap; /* Allows cards to wrap to the next row if needed */
+  gap: 20px; /* Adds spacing between the cards */
+  background-color: #96b6ef; /* Same background as RestaurantList */
+}
+
+/* Individual menu item card */
+.menu-item {
+  border: 1px solid #ffffff; /* Light border around the card */
+  border-radius: 8px; /* Rounds the corners of the card */
+  padding: 20px; /* Adds space inside the card */
+  flex: 1 1 250px; /* Flex-grow: 1; Flex-shrink: 1; Minimum width: 250px */
+  max-width: 350px; /* Sets a maximum width for each card */
+  text-align: center; /* Centers the text inside the card */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transitions for hover effects */
+  background-color: #afbcc7; /* Same background as restaurant cards */
+}
+
+/* Hover effect for expanding the menu item card */
+.menu-item:hover {
+  transform: scale(1.05); /* Slightly enlarges the card on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adds a shadow for a floating effect */
+}
+
+/* Style for the menu item image */
+.menu-image {
+  width: 100%; /* Image takes the full width of the card */
+  height: 150px; /* Sets a fixed height */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  border-radius: 10px; /* Same as restaurant image */
+  margin-bottom: 10px; /* Adds space between the image and content */
+}
+
+/* Menu item title */
+.menu-item h3 {
+  font-size: 1.2em;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Menu item price */
+.menu-item p {
+  font-size: 1.1em;
+  color: #555;
+  margin: 5px 0;
+}
+
+/* Add to Cart button */
+.menu-item button {
+  margin: 10px;
+}
+
+/* Notification message styles */
+.notification {
+  background-color: #28a745; /* Green background */
+  color: white; /* White text color */
+  padding: 15px 30px; /* Padding around the text */
+  position: fixed; /* Fixed position to appear on top */
+  top: 20px; /* Position from the top */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for half the width of the element */
+  border-radius: 5px; /* Rounded corners */
+  z-index: 1000; /* Ensure it appears on top */
+  text-align: center; /* Center the text inside the notification */
+  font-weight: bold; /* Bold text */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  transition: opacity 0.5s ease; /* Fade in/out transition */
+}
+
+/* Hide notification when not visible */
+.notification.hidden {
+  opacity: 0; /* Fully transparent */
+  visibility: hidden; /* Hide from layout */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1024px) {
+  .menu-list {
+    justify-content: space-evenly; /* Adjusts space distribution at tablet size */
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-list {
+    justify-content: center; /* Centers the cards */
+  }
+
+  .menu-item {
+    flex: 1 1 45%; /* Adjusts the card width to 45% of the available space */
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-list {
+    justify-content: center; /* Ensures cards stay centered on smaller screens */
+  }
+
+  .menu-item {
+    flex: 1 1 100%; /* Makes each card take full width of the screen */
+  }
+}
+
+  /* Add menu Button */
+  .add-menu-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .add-menu-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-menu-button:hover {
+    background-color: #218838;
+  }
+  
+  .add-menu-button:active {
+    background-color: #1e7e34;
+  }
