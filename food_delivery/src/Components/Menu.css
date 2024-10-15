@@ -1,5 +1,6 @@
-/* Styles for the MenuList component */
+/* Styles for the Menu component */
 
+/* Styles for the header section */
 .header-div {
   text-align: center;
   border-top: 3px solid #ff7f50; /* Matches border style */
@@ -44,7 +45,7 @@
 }
 
 /* Menu item title */
-.menu-item h3 {
+.menu-item h4 {
   font-size: 1.2em;
   margin: 10px 0;
   font-weight: bold;
@@ -58,9 +59,12 @@
   margin: 5px 0;
 }
 
-/* Add to Cart button */
+/* Button styles */
 .menu-item button {
   margin: 10px;
+  font-family:'Courier New', Courier, monospace;
+  border-radius: 5px;
+  background-color: #ffffff;
 }
 
 /* Notification message styles */
@@ -84,6 +88,36 @@
 .notification.hidden {
   opacity: 0; /* Fully transparent */
   visibility: hidden; /* Hide from layout */
+}
+
+/* Add menu button styles */
+.add-menu-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.add-menu-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family:'Courier New', Courier, monospace;
+  color: white;
+  background-color: #28a745; /* Green background for add button */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-menu-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.add-menu-button:active {
+  background-color: #1e7e34; /* Even darker green on click */
 }
 
 /* Media queries for responsiveness */
@@ -112,32 +146,3 @@
     flex: 1 1 100%; /* Makes each card take full width of the screen */
   }
 }
-
-  /* Add menu Button */
-  .add-menu-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .add-menu-button {
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #28a745;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .add-menu-button:hover {
-    background-color: #218838;
-  }
-  
-  .add-menu-button:active {
-    background-color: #1e7e34;
-  }

@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
@@ -46,14 +46,18 @@ const Menu = () => {
       { id: 'RV4', name: 'Dal Tadka', price: 'Rs. 120', image: '/dal_thadka.jpeg', description: 'Yellow lentils cooked with spices and topped with a tempering of garlic and cumin.' },
       { id: 'RV5', name: 'Mixed Vegetable Salad', price: 'Rs. 80', image: '/mixed_vegetable_salad.jpg', description: 'A refreshing salad made with fresh seasonal vegetables.' },
     ]
+    // ...Other restaurant data
   };
 
   const [menuItems, setMenuItems] = useState(menuData[id] || []);
-  const [cart, setCart] = useState([]);
-  const [message, setMessage] = useState(''); // State to hold the added message
-  const [searchQuery, setSearchQuery] = useState(''); // State for search input
+  const [cart, setCart] = useState(() => {
+    const storedCart = localStorage.getItem('cart');
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+  const [message, setMessage] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // State for new and edited menu item details
+  // Modal states for adding/editing menu items
   const [isAddMenuModalOpen, setIsAddMenuModalOpen] = useState(false);
   const [isEditMenuModalOpen, setIsEditMenuModalOpen] = useState(false);
   const [newMenuItem, setNewMenuItem] = useState({
@@ -74,73 +78,106 @@ const Menu = () => {
     setCart((prevCart) => {
       const itemInCart = prevCart.find((cartItem) => cartItem.id === itemWithRestaurant.id);
 
+      let updatedCart;
       if (itemInCart) {
-        return prevCart.map((cartItem) =>
+        updatedCart = prevCart.map((cartItem) =>
           cartItem.id === itemWithRestaurant.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        const updatedCart = [...prevCart, { ...itemWithRestaurant, quantity: 1 }];
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-        displayMessage(`${itemWithRestaurant.name} added to cart!`); // Show the message
-        return updatedCart;
+        updatedCart = [...prevCart, { ...itemWithRestaurant, quantity: 1 }];
       }
+
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      displayMessage(`${itemWithRestaurant.name} added to cart!`);
+      return updatedCart;
     });
   };
 
   const displayMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => {
-      setMessage(''); // Clear the message after 3 seconds
+      setMessage('');
     }, 3000);
   };
 
+  // Get quantity of the item in cart
+  const getItemQuantity = (itemId) => {
+    const itemInCart = cart.find((cartItem) => cartItem.id === itemId);
+    return itemInCart ? itemInCart.quantity : 0;
+  };
 
-  const filteredMenuItems = menuItems.filter(item =>
+  const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Open the add menu modal
+  // Handle increasing the quantity
+  const handleIncreaseQuantity = (itemId) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((cartItem) =>
+        cartItem.id === itemId
+          ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          : cartItem
+      );
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
+  // Handle decreasing the quantity
+  const handleDecreaseQuantity = (itemId) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart
+        .map((cartItem) =>
+          cartItem.id === itemId
+            ? { ...cartItem, quantity: Math.max(cartItem.quantity - 1, 0) }
+            : cartItem
+        )
+        .filter((cartItem) => cartItem.quantity > 0); // Remove item if quantity reaches 0
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
+  // Open add/edit modal
   const handleAddMenuClick = () => {
-    setNewMenuItem({ id: '', name: '', price: '', image: '', description: '' }); // Reset new item
+    setNewMenuItem({ id: '', name: '', price: '', image: '', description: '' });
     setIsAddMenuModalOpen(true);
   };
 
-  // Close the add menu modal
+  const handleEditMenuClick = (item) => {
+    setSelectedMenuItem(item);
+    setNewMenuItem({ ...item });
+    setIsEditMenuModalOpen(true);
+  };
+
   const handleCloseAddMenuModal = () => {
     setIsAddMenuModalOpen(false);
   };
 
-  // Open the edit menu modal
-  const handleEditMenuClick = (item) => {
-    setSelectedMenuItem(item);
-    setNewMenuItem({ ...item }); // Set the selected item for editing
-    setIsEditMenuModalOpen(true);
-  };
-
-  // Close the edit menu modal
   const handleCloseEditMenuModal = () => {
     setIsEditMenuModalOpen(false);
   };
 
-  // Handle input changes for adding and editing
   const handleMenuInputChange = (e) => {
     const { name, value } = e.target;
     setNewMenuItem({ ...newMenuItem, [name]: value });
   };
 
-  // Handle adding a new menu item
   const handleAddNewMenuItem = () => {
-    const updatedMenuItems = [...menuItems, { ...newMenuItem, id: `${id}${menuItems.length + 1}` }]; // Create new ID
-    // Save the updated menu items (this can be more sophisticated in a real app)
+    const initials = restaurant.name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .join('');
+    const newId = `${initials}${menuItems.length + 1}`; // Generate new ID based on initials
+    const updatedMenuItems = [...menuItems, { ...newMenuItem, id: newId }];
     setMenuItems(updatedMenuItems);
     setIsAddMenuModalOpen(false);
   };
 
-  // Handle editing an existing menu item
   const handleEditMenuItem = () => {
-    const updatedMenuItems = menuItems.map(item =>
+    const updatedMenuItems = menuItems.map((item) =>
       item.id === selectedMenuItem.id ? newMenuItem : item
     );
     setMenuItems(updatedMenuItems);
@@ -151,13 +188,11 @@ const Menu = () => {
     <>
       <Header cartCount={cart.length} showSearchBar={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      <div className='header-div'>
+      <div className="header-div">
         <h2>{restaurant.name} Menu</h2>
         <p>{restaurant.description}</p>
 
         {message && <div className="notification">{message}</div>}
-
-        
 
         <div className="menu-list">
           {filteredMenuItems.map((item) => (
@@ -166,14 +201,29 @@ const Menu = () => {
               <h4>{item.name}</h4>
               <p>{item.description}</p>
               <p><b>{item.price}</b></p>
-              <button onClick={() => handleAddToCart(item)}>Add to Cart</button>
-              <button onClick={() => handleEditMenuClick(item)}>Edit</button> {/* Edit button */} 
+
+              {/* Conditionally render Add to Cart button if quantity is 0 */}
+              {getItemQuantity(item.id) === 0 && (
+                <button onClick={() => handleAddToCart(item)}>Add to Cart</button>
+              )}
+
+              {/* Display quantity and + / - buttons when item is in the cart */}
+              {getItemQuantity(item.id) > 0 && (
+                <div className="item-quantity">
+                  <button onClick={() => handleDecreaseQuantity(item.id)}>-</button>
+                  <span> Quantity: {getItemQuantity(item.id)} </span>
+                  <button onClick={() => handleIncreaseQuantity(item.id)}>+</button>
+                </div>
+              )}
+
+              <button onClick={() => handleEditMenuClick(item)}>Edit</button>
             </div>
           ))}
-          <div className='add-menu-card'>
+
+          <div className="add-menu-card">
             <button className="add-menu-button" onClick={handleAddMenuClick}>
               + Add New Menu Item
-            </button> {/* Button to add new menu item */}
+            </button>
           </div>
         </div>
       </div>
@@ -190,8 +240,8 @@ const Menu = () => {
             <label>Image URL:</label>
             <input type="text" name="image" value={newMenuItem.image} onChange={handleMenuInputChange} placeholder="Image URL" />
             <label>Description:</label>
-            <input type="text" name="description" value={newMenuItem.description} onChange={handleMenuInputChange} placeholder="Description" />
-            <button onClick={handleAddNewMenuItem}>Add Menu Item</button>
+            <textarea name="description" value={newMenuItem.description} onChange={handleMenuInputChange} placeholder="Description"></textarea>
+            <button onClick={handleAddNewMenuItem}>Add</button>
             <button onClick={handleCloseAddMenuModal}>Close</button>
           </div>
         </div>
@@ -203,13 +253,13 @@ const Menu = () => {
           <div className="modal-content">
             <h2>Edit Menu Item</h2>
             <label>Name:</label>
-            <input type="text" name="name" value={newMenuItem.name} onChange={handleMenuInputChange} placeholder="Menu Item Name" />
+            <input type="text" name="name" value={newMenuItem.name} onChange={handleMenuInputChange} />
             <label>Price:</label>
-            <input type="text" name="price" value={newMenuItem.price} onChange={handleMenuInputChange} placeholder="Price" />
+            <input type="text" name="price" value={newMenuItem.price} onChange={handleMenuInputChange} />
             <label>Image URL:</label>
-            <input type="text" name="image" value={newMenuItem.image} onChange={handleMenuInputChange} placeholder="Image URL" />
+            <input type="text" name="image" value={newMenuItem.image} onChange={handleMenuInputChange} />
             <label>Description:</label>
-            <input type="text" name="description" value={newMenuItem.description} onChange={handleMenuInputChange} placeholder="Description" />
+            <textarea name="description" value={newMenuItem.description} onChange={handleMenuInputChange}></textarea>
             <button onClick={handleEditMenuItem}>Save Changes</button>
             <button onClick={handleCloseEditMenuModal}>Close</button>
           </div>

@@ -13,6 +13,8 @@
 
 .restaurant-list button {
   margin: 10px;
+  font-family:'Courier New', Courier, monospace;
+  border-radius: 5px;
 }
   
   /* Individual restaurant card */
@@ -84,7 +86,7 @@
   padding: 12px 24px;
   font-size: 16px;
   font-weight: bold;
-  color: white;
+  color: rgb(255, 255, 255);
   background-color: #28a745;
   border: none;
   border-radius: 8px;
