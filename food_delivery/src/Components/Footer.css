@@ -1,15 +1,12 @@
+
 footer {
-    background-color: #f0f0f0; /* Light background color */
+    background-color: #ffb070; 
     padding: 20px;
     text-align: center;
     font-family: 'Arial', sans-serif;
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.064); /* Adds a shadow effect */
-    background-color: #ffb070; 
     border-top: 3px solid #ff7f50; /* Separation line on top */
-    position: relative;
-    bottom: 0;
-    left: 0;
-    width: auto;
+    width: 100%; /* Ensures footer spans the entire width */
 }
 
 footer h3 {
