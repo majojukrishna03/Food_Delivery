@@ -1,0 +1,201 @@
+/* Styles for the RestaurantList component */
+
+/* Container that holds all restaurant cards */
+.restaurant-list {
+    display: flex; /* Enables Flexbox */
+    justify-content: space-around; /* Adds space between cards */
+    padding: 20px; /* Adds space around the entire list */
+    flex-wrap: wrap; /* Allows cards to wrap to the next row if needed */
+    gap: 20px; /* Adds spacing between the cards */
+    background-color: #96b6ef;
+    border-top: 3px solid #ff7f50;
+  }
+
+.restaurant-list button {
+  margin: 10px;
+  font-family:'Courier New', Courier, monospace;
+  border-radius: 5px;
+}
+  
+  /* Individual restaurant card */
+  .card {
+    border: 1px solid #ffffff; /* Light border around the card */
+    border-radius: 8px; /* Rounds the corners of the card */
+    padding: 20px; /* Adds space inside the card */
+    flex: 1 1 250px; /* Flex-grow: 1; Flex-shrink: 1; Minimum width: 250px */
+    max-width: 350px; /* Sets a maximum width for each card */
+    text-align: center; /* Centers the text inside the card */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transitions for hover effects */
+    background-color: #afbcc7;
+  }
+  
+  /* Hover effect for expanding the card */
+  .card:hover {
+    transform: scale(1.05); /* Slightly enlarges the card on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adds a shadow for a floating effect */
+  }
+  
+  /* Style for the restaurant image */
+  .image {
+    width: 100%; /* Image takes the full width of the card */
+    height: 150px; /* Sets a fixed height */
+    object-fit: cover /* Ensures the image covers the area without distortion */
+  }
+
+  img {
+    border-radius: 10px;
+  }
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 1024px) {
+    .restaurant-list {
+      justify-content: space-evenly; /* Adjusts space distribution at tablet size */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .restaurant-list {
+      justify-content: center; /* Centers the cards */
+    }
+  
+    .card {
+      flex: 1 1 45%; /* Adjusts the card width to 45% of the available space */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .restaurant-list {
+      justify-content: center; /* Ensures cards stay centered on smaller screens */
+    }
+  
+    .card {
+      flex: 1 1 100%; /* Makes each card take full width of the screen */
+    }
+  }
+  
+
+  /* Add Restaurant Button */
+.add-restaurant-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.add-restaurant-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  background-color: #28a745;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-restaurant-button:hover {
+  background-color: #218838;
+}
+
+.add-restaurant-button:active {
+  background-color: #1e7e34;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  width: 400px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+}
+
+.modal-content label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.modal-content input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.modal-content input[type="text"]:focus {
+  border-color: #007bff;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button:active {
+  background-color: #004085;
+}
+
+/* Close button */
+.modal-content button:last-child {
+  background-color: #dc3545;
+}
+
+.modal-content button:last-child:hover {
+  background-color: #c82333;
+}
+
+/* Fade-in animation for the modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

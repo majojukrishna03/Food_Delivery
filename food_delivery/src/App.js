@@ -1,24 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import Homepage from './Components/Homepage';
+import ContactUs from './ContactUs';
+import Restaurant from './Components/Restaurant';
+import Menu from './Components/Menu';
+import Cart from './Components/Cart';
+import Checkout from './Components/Checkout';
+import PrivacyPolicy from './PrivacyPolicy';
+import TermsOfService from './TermsOfService';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      {/* <Router> */}
+      <Routes>
+        <Route path='/' element={<Restaurant />} />
+        <Route path='/about' element={<Homepage />} />
+        <Route path='/contact' element={<ContactUs />} />
+        <Route path='/privacy' element={<PrivacyPolicy/>} />
+        <Route path='/terms' element={<TermsOfService/>} />
+        {/* <Route path='/login' element={<login />} /> */}
+        {/* <Route path='/register' element={<Register />} /> */}
+        <Route path="/restaurant/:id" element={<Menu Restaurant={Restaurant}/>} />
+        <Route path="/cart" element={<Cart />} /> {/* Add the cart route */}
+        <Route path="/checkout" element={<Checkout />} />
+
+      </Routes>
+      {/* </Router> */}
+    </BrowserRouter>
   );
 }
 
