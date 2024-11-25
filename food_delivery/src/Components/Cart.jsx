@@ -143,7 +143,7 @@ const Cart = () => {
 
   return (
     <>
-      <Header cartCount={cart.reduce((count, item) => count + item.quantity, 0)} /> {/* Pass total quantity to Header */}
+      <Header user = {localStorage.getItem('user')} cartCount={cart.reduce((count, item) => count + item.quantity, 0)} /> {/* Pass total quantity to Header */}
       <div className='background'>
         <div className="cart-container">
           <h2>Your Cart</h2>

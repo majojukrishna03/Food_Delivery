@@ -1,12 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 
-const Header = ({cartCount,showSearchBar,searchQuery, setSearchQuery}) => {
-
+const Header = ({ 
+  cartCount, 
+  showSearchBar, 
+  searchQuery, 
+  setSearchQuery, 
+  user, 
+  onLogout 
+}) => {
   return (
     <header className="Header">
-      <img src="/Inti Bhojanam.png" alt="Inti Bhojanam Logo"/>
-      <h2>Inti Bhojanam</h2>
+      <div className="logo">
+        <img src="/Inti Bhojanam.png" alt="Inti Bhojanam Logo" />
+        <h2>Inti Bhojanam</h2>
+      </div>
       {showSearchBar && (
         <input
           type="text"
@@ -18,9 +27,27 @@ const Header = ({cartCount,showSearchBar,searchQuery, setSearchQuery}) => {
       )}
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/cart">Cart {cartCount > 0 ? `(${cartCount})` : ''}</a></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li>
+            <Link to="/cart">
+              Cart {cartCount > 0 && <span>({cartCount})</span>}
+            </Link>
+          </li>
+          {user ? (
+            <>
+              <li>
+                <Link to="/" onClick={onLogout}>
+                  Logout
+                </Link>
+                </li>
+            </>
+          ) : (
+            <>
+              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/register">Register</Link></li>
+            </>
+          )}
           <li>Hyderabad</li>
         </ul>
       </nav>
