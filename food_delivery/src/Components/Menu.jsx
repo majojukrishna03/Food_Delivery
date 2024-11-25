@@ -186,7 +186,7 @@ const Menu = () => {
 
   return (
     <>
-      <Header cartCount={cart.length} showSearchBar={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Header user = {localStorage.getItem('user')} cartCount={cart.length} showSearchBar={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <div className="header-div">
         <h2>{restaurant.name} Menu</h2>

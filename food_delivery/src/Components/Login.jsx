@@ -46,7 +46,7 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <Header />
+      <Header user = {localStorage.getItem('user')}/>
       <h2>Login</h2>
       {message && <p className="success-message">{message}</p>}
       {error && <p className="error-message">{error}</p>}
