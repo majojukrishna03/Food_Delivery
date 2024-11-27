@@ -496,6 +496,7 @@ const Restaurant = () => {
 
   const onLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setUser(null);
     navigate('/');
   };

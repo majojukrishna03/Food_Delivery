@@ -9,7 +9,7 @@ import Cart from './Components/Cart';
 import Checkout from './Components/Checkout';
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfService from './TermsOfService';
-import InitialPage from './Components/initialPage';
+import InitialPage from './Components/initialPAge';
 import UserHome from './Components/userHomePage';
 import AdminHome from './Components/adminHomePage';
 import Register from './Components/Register';
