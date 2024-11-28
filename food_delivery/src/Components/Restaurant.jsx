@@ -470,7 +470,7 @@ const Restaurant = () => {
   const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
@@ -483,7 +483,8 @@ const Restaurant = () => {
         setLoading(false);
       }
     };
-
+    
+    // console.log(cart.length);
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -562,6 +563,19 @@ const Restaurant = () => {
     restaurant.name && restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handlecartCount = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/cart/${user._id}`);
+      
+      const cartData = response.data;
+      const itemCount = cartData.length;
+      return itemCount;
+      
+    } catch (err) {
+      setError('Failed to get cart data');
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -573,7 +587,7 @@ const Restaurant = () => {
 
   return (
     <>
-      <Header onLogout={onLogout} user={user} showSearchBar={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Header cartCount = {handlecartCount} onLogout={onLogout} user={user} showSearchBar={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <div className="restaurant-list">
         {filteredRestaurants.map((restaurant) => (
           <div key={restaurant._id} className="card">
