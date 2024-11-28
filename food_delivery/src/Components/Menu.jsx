@@ -677,43 +677,36 @@ const Menu = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
 
   const handleAddToCart = async (item) => {
-    const itemWithRestaurant = {
-      ...item,
-      restaurantName: restaurant.name,
-    };
+    try {
+      const itemWithRestaurant = { ...item, restaurantName: restaurant.name };
   
-    setCart((prevCart) => {
-      const itemInCart = prevCart.find(
-        (cartItem) => cartItem._id === itemWithRestaurant._id
-      );
+      const itemInCart = cart.find((cartItem) => cartItem._id === itemWithRestaurant._id);
   
       let updatedCart;
       if (itemInCart) {
-        updatedCart = prevCart.map((cartItem) =>
+        updatedCart = cart.map((cartItem) =>
           cartItem._id === itemWithRestaurant._id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        updatedCart = [...prevCart, { ...itemWithRestaurant, quantity: 1 }];
+        updatedCart = [...cart, { ...itemWithRestaurant, quantity: 1 }];
       }
   
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-      displayMessage(`${itemWithRestaurant.name} added to cart!`);
       setCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      displayMessage(`${itemWithRestaurant.name} added to cart!`);
   
-      // If this is the first item being added to the cart, create a new cart record
-      if (cart.length === 1) {
-        postCartToDatabase(updatedCart);
-      } 
-
-      if (cart.length > 1) {
-        updateCartInDatabase(updatedCart);
+      if (updatedCart.length === 1) {
+        await postCartToDatabase(updatedCart); // Create new cart in DB
+      } else {
+        await updateCartInDatabase(updatedCart); // Update existing cart in DB
       }
-
-      // return updatedCart;
-    });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
   };
+  
 
   const postCartToDatabase = async (cartItems) => {
     try {
