@@ -23,23 +23,29 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/users/auth/login', formData);
-      
+      // Determine login endpoint based on role
+      const isAdminLogin = window.location.pathname.includes('/admin/login');
+      const loginEndpoint = isAdminLogin 
+        ? 'http://localhost:5000/api/admin/login' 
+        : 'http://localhost:5000/api/users/auth/login';
+  
+      const response = await axios.post(loginEndpoint, formData);
+  
       // Assuming the response contains token and user details
       const { token, user } = response.data;
-
+  
       setMessage('Login successful!');
       setError('');
-      
+      alert('Login Successful.')
+  
       // Store token and user details (including role) in localStorage
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));  // Store user details
-
-      // Redirect to /restaurants after successful login
+      localStorage.setItem('user', JSON.stringify(user)); // Store user details
+  
       navigate('/restaurants');
-      
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password.');
+      const isAdminLogin = window.location.pathname.includes('/admin/login');
+      setError(err.response?.data?.message || (isAdminLogin ? 'Invalid admin credentials.' : 'Invalid user credentials.'));
       setMessage('');
     }
   };

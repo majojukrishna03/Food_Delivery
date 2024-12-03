@@ -26,6 +26,10 @@ const Menu = () => {
         );
         // console.log(response.data); // Log the response to inspect the data
         setMenuItems(response.data);
+        // console.log(response);
+        const restaurantDetails = response.data[0].restaurantId; // Adjust the path as needed
+        // console.log(restaurantDetails);
+        localStorage.setItem('restaurantDetails', JSON.stringify(restaurantDetails));
       } catch (error) {
         console.error('Error fetching menu items:', error);
       }
