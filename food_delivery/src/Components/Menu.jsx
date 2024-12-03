@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
@@ -16,6 +16,7 @@ const Menu = () => {
   });
   const [message, setMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -148,7 +149,7 @@ const updateCartInDatabase = async (updatedCart) => {
     });
 
     console.log("Cart updated in the database.");
-    displayMessage(`Cart Updated.`);
+    // displayMessage(`Cart Updated.`);
   } catch (error) {
     console.error("Error updating cart in the database:", error);
   }
@@ -276,6 +277,14 @@ const updateCartInDatabase = async (updatedCart) => {
     }
   };
 
+  const onLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('cart');
+    alert('Logout Successfull.');
+    navigate('/');
+  };
+
   return (
     <>
       <Header
@@ -284,6 +293,7 @@ const updateCartInDatabase = async (updatedCart) => {
         showSearchBar={true}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        onLogout={onLogout}
       />
 
       <div className="header-div">

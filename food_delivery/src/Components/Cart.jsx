@@ -132,25 +132,27 @@ const Cart = () => {
           return;
         }
   
-        // Fetch cart details
+        // Check if cart is already fetched and populated
+        if (cart.length > 0) {
+          console.log('Cart is already populated, skipping fetch.');
+          return; // Skip the fetch if the cart is already populated
+        }
+  
+        // Fetch cart details only if not already populated
         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
         const cartItems = response.data.items;
-        // console.log(cartItems);
   
         // If cart is empty, delete it from the database
         if (cartItems.length === 0) {
           console.log('Cart is empty. Deleting from database...');
-          // console.log("reached",userId);
-          // Send POST request to delete the cart with userId in the body
           const deleteResponse = await axios.delete(`http://localhost:5000/api/cart/clear/${userId}`);
   
-          // console.log(deleteResponse);
           if (deleteResponse.status === 200) {
             console.log('Cart deleted successfully');
           }
           setCart([]); // Clear cart state
         } else {
-          setCart(cartItems); // Update cart state
+          setCart(cartItems); // Update cart state with fetched items
         }
       } catch (error) {
         console.error('Error fetching cart details:', error);
@@ -158,7 +160,7 @@ const Cart = () => {
     };
   
     fetchCartDetails();
-  }, []);
+  }, [cart]); // Add 'cart' as a dependency to avoid re-running unnecessarily
   
   
 
@@ -215,10 +217,17 @@ const Cart = () => {
     }
   };
   
+  const onLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('cart');
+    alert('Logout Successfull.');
+    navigate('/');
+  };
 
   return (
     <>
-      <Header user={localStorage.getItem('user')} token={localStorage.getItem('token')} cartCount={cart.length} />
+      <Header onLogout = {onLogout} user={localStorage.getItem('user')} token={localStorage.getItem('token')} cartCount={cart.length} />
       <div className='background'>
         <div className="cart-container">
           <h2>Your Cart</h2>
