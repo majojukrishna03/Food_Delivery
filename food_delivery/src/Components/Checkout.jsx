@@ -7,12 +7,8 @@ import Footer from './Footer';
 
 const activeUser = localStorage.getItem('user');
 const parsedUser = JSON.parse(activeUser);
-// console.log(parsedUser);
-// console.log(parsedUser.id);
 const restaurantDetails = localStorage.getItem('restaurantDetails');
 const parsedRestaurantDetails = JSON.parse(restaurantDetails);
-// console.log(parsedRestaurantDetails);
-// console.log(parsedRestaurantDetails._id);
 
 const Checkout = () => {
   const [cart, setCart] = useState([]);
@@ -34,6 +30,13 @@ const Checkout = () => {
   const [shippingError, setShippingError] = useState(''); // State for shipping validation error
 
   const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    if (!parsedUser) {
+      // If user is not logged in, redirect to the login page
+      navigate('/login');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -120,13 +123,11 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Check if all shipping fields are filled
     if (Object.values(shippingInfo).some(field => !field)) {
       setShippingError('Please fill in all shipping information fields.');
-      return; // Prevent proceeding to payment
+      return;
     }
 
-    // Prepare the order data with shipping details and items
     const orderData = {
       userId: parsedUser.id, 
       restaurantId: parsedRestaurantDetails._id, 
@@ -139,14 +140,13 @@ const Checkout = () => {
     };
 
     try {
-      // Send POST request to create the order
       const response = await axios.post('http://localhost:5000/api/orders', orderData);
 
       if (response.status === 201) {
         alert('Your order has been created.');
 
-        // Clear the cart and shipping details
-        // localStorage.removeItem('cart');
+        localStorage.removeItem('cart');
+        await axios.delete(`http://localhost:5000/api/cart/clear/${parsedUser.id}`);
         setCart([]);
         setShippingInfo({
           name: '',
@@ -157,10 +157,8 @@ const Checkout = () => {
         });
       }
 
-      // Proceed to open payment modal
       setIsPaymentModalOpen(true);
-
-    }catch (error) {
+    } catch (error) {
       console.error('Error creating order:', error);
       alert('An error occurred while checking out your order. Please try again.');
     }
@@ -174,34 +172,23 @@ const Checkout = () => {
     }
 
     try {
-
-      // Send GET request to find latest order
       const response = await axios.get(`http://localhost:5000/api/orders/user/latest/${parsedUser.id}`);
-
       const OrderDetails = response.data;
-      // console.log(OrderDetails);
       const OrderId = OrderDetails._id;
-      // console.log(OrderId);
       const Amount = OrderDetails.totalAmount;
-      // console.log(Amount);
 
-
-      // Prepare the data that need to be stored in the database.
       const paymentData = {
         userId : parsedUser.id,
         orderId : OrderId,
         amount : Amount,
-      }
+      };
 
-      // Send POST request to create the payment 
-      const paymentResponse = await axios.post('http://localhost:5000/api/payments',paymentData);
+      const paymentResponse = await axios.post('http://localhost:5000/api/payments', paymentData);
 
       if (paymentResponse.status === 201) {
         alert('Payment successful! Your order has been placed.');
-
-        // Close the payment modal and navigate to the home page
         setIsPaymentModalOpen(false);
-        navigate('/restaurants'); // Adjust the path to your home page
+        navigate('/restaurants');
       } else {
         alert('There was an issue processing your order.');
       }
@@ -215,7 +202,7 @@ const Checkout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('cart');
-    alert('Logout Successfull.');
+    alert('Logout Successful.');
     navigate('/');
   };
 
@@ -288,73 +275,58 @@ const Checkout = () => {
                   onChange={handleChange}
                   required
                 />
-                {shippingError && <span className="error">{shippingError}</span>} {/* Display shipping error */}
-                <button type="submit" className="checkout-button">
-                  Continue to Payment
-                </button>
+                <button type="submit">Proceed to Payment</button>
+                {shippingError && <p className="error-message">{shippingError}</p>}
               </form>
+
+              {isPaymentModalOpen && (
+                <div className="payment-modal">
+                  <form onSubmit={handlePaymentSubmit}>
+                    <h3>Payment Information</h3>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      placeholder="Card Number"
+                      value={paymentInfo.cardNumber}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.cardNumber && <p className="error-message">{errors.cardNumber}</p>}
+                    <input
+                      type="text"
+                      name="cardHolder"
+                      placeholder="Card Holder Name"
+                      value={paymentInfo.cardHolder}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.cardHolder && <p className="error-message">{errors.cardHolder}</p>}
+                    <input
+                      type="text"
+                      name="expiryDate"
+                      placeholder="Expiry Date (MM/YY)"
+                      value={paymentInfo.expiryDate}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.expiryDate && <p className="error-message">{errors.expiryDate}</p>}
+                    <input
+                      type="text"
+                      name="cvv"
+                      placeholder="CVV"
+                      value={paymentInfo.cvv}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.cvv && <p className="error-message">{errors.cvv}</p>}
+                    <button type="submit">Submit Payment</button>
+                  </form>
+                </div>
+              )}
             </>
           )}
         </div>
       </div>
-
-      {/* Payment Modal */}
-      {isPaymentModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Payment Information</h2>
-            <form onSubmit={handlePaymentSubmit}>
-              <label>Card Number:</label>
-              <input
-                type="text"
-                name="cardNumber"
-                value={paymentInfo.cardNumber}
-                onChange={handlePaymentChange}
-                placeholder="Enter your card number"
-                required
-              />
-              {errors.cardNumber && <span className="error">{errors.cardNumber}</span>}
-
-              <label>Card Holder Name:</label>
-              <input
-                type="text"
-                name="cardHolder"
-                value={paymentInfo.cardHolder}
-                onChange={handlePaymentChange}
-                placeholder="Enter card holder's name"
-                required
-              />
-              {errors.cardHolder && <span className="error">{errors.cardHolder}</span>}
-
-              <label>Expiry Date:</label>
-              <input
-                type="text"
-                name="expiryDate"
-                value={paymentInfo.expiryDate}
-                onChange={handlePaymentChange}
-                placeholder="MM/YY"
-                required
-              />
-              {errors.expiryDate && <span className="error">{errors.expiryDate}</span>}
-
-              <label>CVV:</label>
-              <input
-                type="text"
-                name="cvv"
-                value={paymentInfo.cvv}
-                onChange={handlePaymentChange}
-                placeholder="CVV"
-                required
-              />
-              {errors.cvv && <span className="error">{errors.cvv}</span>}
-
-              <button type="submit" className="payment-submit">
-                Submit Payment
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
       <Footer />
     </>
   );
