@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
+import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -52,8 +53,11 @@ const Login = () => {
   };
 
   return (
+    <>
+    <Header />
+    
     <div className="auth-container">
-      <Header />
+      
       <h2>Login</h2>
       {/* {message && <p className="success-message">{message}</p>} */}
       {/* {error && <p className="error-message">{error}</p>} */}
@@ -77,8 +81,9 @@ const Login = () => {
         <button type="submit" className="auth-button">Login</button>
       </form>
       <h4>New user? <a href='/register'>Register Now</a></h4>
-      <Footer />
     </div>
+    <Footer />
+    </>
   );
 };
 

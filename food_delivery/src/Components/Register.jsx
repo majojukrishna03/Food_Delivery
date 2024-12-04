@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
+import './Register.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -60,8 +61,8 @@ const Register = () => {
 
   return (
     <>
-      <div className="auth-container">
-        <Header />
+    <Header />
+      <div className="register-container">
         <h2>Register</h2>
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}
@@ -106,18 +107,19 @@ const Register = () => {
             value={formData.phone}
             onChange={handleChange}
           />
-          <textarea
+          <input
+          type='text'
             name="address"
             placeholder="Address (Optional)"
             value={formData.address}
             onChange={handleChange}
           />
-          <button type="submit" className="auth-button">
+          <button type="submit" className="register-button">
             Register
           </button>
         </form>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

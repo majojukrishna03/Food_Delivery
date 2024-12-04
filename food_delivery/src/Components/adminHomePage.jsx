@@ -28,8 +28,10 @@ const AdminHome = () => {
   }, []);
 
   return (
+    <>
+    <Header />
     <div className="home-container">
-      <Header />
+      
       <main className="hero">
         <div className="hero-content">
           <h2>Welcome to the Admin Portal</h2>
@@ -42,8 +44,9 @@ const AdminHome = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
+    <Footer />
+    </>
   );
 };
 

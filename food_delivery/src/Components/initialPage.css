@@ -1,0 +1,91 @@
+/* InitialPage.css */
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 69vh;
+  }
+  
+  .hero {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f9d0bc, #fff3f3);
+    color: #fff;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .hero-content {
+    max-width: 800px;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .hero-content h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #148c5e;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  .cta-button:hover {
+    background-color: #148c5e;
+    transform: scale(1.05);
+  }
+
+
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-content h2 {
+      font-size: 2.5rem;
+    }
+  
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+  
+    .cta-button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+  

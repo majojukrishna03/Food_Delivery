@@ -1,9 +1,9 @@
 // src/components/InitialPage.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Homepage.css'; // Reuse the CSS file for styling
 import Header from './Header';
 import Footer from './Footer';
+import './initialPage.css';
 
 const InitialPage = () => {
   return (
@@ -20,8 +20,8 @@ const InitialPage = () => {
             </div>
           </div>
         </main>
-        <Footer/>
       </div>
+      <Footer/>
     </>
   );
 };
