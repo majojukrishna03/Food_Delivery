@@ -33,7 +33,7 @@ const AdminHome = () => {
       <main className="hero">
         <div className="hero-content">
           <h2>Welcome to the Admin Portal</h2>
-          <p>Create courses, manage and review applications effectively!</p>
+          <p>Manage Restaurants, Menus, and Orders with Ease!</p>
           <div className="cta-buttons">
             {!isAdminExists && (
               <Link to="/admin/register" className="cta-button">Register</Link>

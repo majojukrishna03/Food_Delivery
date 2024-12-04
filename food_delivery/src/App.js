@@ -14,6 +14,7 @@ import UserHome from './Components/userHomePage';
 import AdminHome from './Components/adminHomePage';
 import Register from './Components/Register';
 import Login from './Components/Login';
+import MyOrders from './Components/Myorders';
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/restaurant/:id" element={<Menu Restaurant={Restaurant}/>} />
         <Route path="/cart" element={<Cart />} /> {/* Add the cart route */}
         <Route path="/checkout" element={<Checkout />} />
+        <Route path='/user/orders' element={<MyOrders/>}/>
 
       </Routes>
       {/* </Router> */}

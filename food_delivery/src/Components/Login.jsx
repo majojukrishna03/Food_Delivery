@@ -26,7 +26,7 @@ const Login = () => {
       // Determine login endpoint based on role
       const isAdminLogin = window.location.pathname.includes('/admin/login');
       const loginEndpoint = isAdminLogin 
-        ? 'http://localhost:5000/api/admin/login' 
+        ? 'http://localhost:5000/api/users/auth/admin/login' 
         : 'http://localhost:5000/api/users/auth/login';
   
       const response = await axios.post(loginEndpoint, formData);
@@ -45,8 +45,9 @@ const Login = () => {
       navigate('/restaurants');
     } catch (err) {
       const isAdminLogin = window.location.pathname.includes('/admin/login');
-      setError(err.response?.data?.message || (isAdminLogin ? 'Invalid admin credentials.' : 'Invalid user credentials.'));
+      setError(err.response?.data?.message);
       setMessage('');
+      alert(`${error}`);
     }
   };
 
@@ -54,8 +55,8 @@ const Login = () => {
     <div className="auth-container">
       <Header />
       <h2>Login</h2>
-      {message && <p className="success-message">{message}</p>}
-      {error && <p className="error-message">{error}</p>}
+      {/* {message && <p className="success-message">{message}</p>} */}
+      {/* {error && <p className="error-message">{error}</p>} */}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -75,6 +76,7 @@ const Login = () => {
         />
         <button type="submit" className="auth-button">Login</button>
       </form>
+      <h4>New user? <a href='/register'>Register Now</a></h4>
       <Footer />
     </div>
   );

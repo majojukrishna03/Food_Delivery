@@ -2,23 +2,26 @@ import React from 'react';
 import './Homepage.css';
 import './Header.css'
 import Footer from './Footer';
+import Header from './Header';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Homepage = () => {
+  
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('cart');
+    alert('Logout Successfull.');
+    navigate('/');
+  };
+
   return (
     <>
-      <header className='Header'>
-        <img src='Inti Bhojanam.png' alt='Logo'></img>
-        <h2>Inti Bhojanam</h2>
-        <nav>
-          <ul>
-            {/* <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li> */}
-            <li><a href='/'>Home</a></li>
-            <li>Hyderabad</li>
-          </ul>
-        </nav>
-      </header>
-      
+    <Header onLogout = {onLogout} user={localStorage.getItem('user')} token={localStorage.getItem('token')}/>
       <section className='Content-background'>
         <section className='Content'>
           <h1>Welcome to Inti Bhojanam - Bringing homely Telugu flavors to your doorstep</h1>
