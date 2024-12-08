@@ -15,6 +15,12 @@
   margin: 10px;
   font-family:'Courier New', Courier, monospace;
   border-radius: 5px;
+  color: #333;
+  background-color: white;
+}
+
+.restaurant-list button:hover {
+  background-color: #218838;
 }
   
   /* Individual restaurant card */

@@ -123,6 +123,32 @@ button {
   text-align: center; /* Center align headings */
 }
 
+.payment-modal {
+  margin-top: 10px;
+  align-items: center;
+}
+
+.payment-modal form {
+  background-color: #f2f8f9;
+}
+
+.payment-modal form input {
+  padding: 12px; /* Padding for inputs */
+  margin-bottom: 15px; /* Space between inputs */
+  border: 1px solid #ccc; /* Light border for inputs */
+  border-radius: 5px; /* Rounded corners for inputs */
+  font-size: 1em; /* Standard font size */
+  transition: border-color 0.3s ease; /* Transition effect for focus */
+}
+
+.payment-modal form input:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #28a745; /* Green border on focus */
+}
+
+
+
+
 /* Responsive styles */
 @media (max-width: 600px) {
   .checkout-container {

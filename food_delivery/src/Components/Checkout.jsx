@@ -144,17 +144,6 @@ const Checkout = () => {
 
       if (response.status === 201) {
         alert('Your order has been created.');
-
-        localStorage.removeItem('cart');
-        await axios.delete(`http://localhost:5000/api/cart/clear/${parsedUser.id}`);
-        setCart([]);
-        setShippingInfo({
-          name: '',
-          address: '',
-          city: '',
-          postalCode: '',
-          phone: '',
-        });
       }
 
       setIsPaymentModalOpen(true);
@@ -184,9 +173,13 @@ const Checkout = () => {
       };
 
       const paymentResponse = await axios.post('http://localhost:5000/api/payments', paymentData);
+      // console.log(paymentResponse)
 
       if (paymentResponse.status === 201) {
         alert('Payment successful! Your order has been placed.');
+        localStorage.removeItem('cart');
+        await axios.delete(`http://localhost:5000/api/cart/clear/${parsedUser.id}`);
+        setCart([]);
         setIsPaymentModalOpen(false);
         navigate('/restaurants');
       } else {

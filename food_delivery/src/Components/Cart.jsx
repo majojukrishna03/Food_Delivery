@@ -216,7 +216,12 @@ const Cart = () => {
       console.error('Error updating quantity:', error);
     }
   };
-  
+  const handleCheckout = () => {
+    // Function to handle checkout
+    // For now, we just log the checkout process or navigate to a checkout page
+    console.log('Proceeding to checkout...');
+    navigate('/checkout'); // Navigate to the checkout page
+  };
   const onLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
@@ -256,7 +261,7 @@ const Cart = () => {
               <div className="cart-total">
                 <h3>Total: Rs. {calculateTotal()}</h3>
               </div>
-              <button className="checkout-button" onClick={() => navigate('/checkout')}>Checkout</button>
+              <button className="checkout-button" onClick={handleCheckout}>Checkout</button>
             </>
           )}
         </div>

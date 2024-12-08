@@ -247,7 +247,7 @@ const updateCartInDatabase = async (updatedCart) => {
         newMenuItemData
       );
       if (response.status === 201) {
-        setMenuItems([...menuItems, response.data]);
+        setMenuItems([...menuItems, newMenuItemData]);
         setIsAddMenuModalOpen(false);
         displayMessage('Menu item added successfully!');
       } else {
@@ -278,6 +278,21 @@ const updateCartInDatabase = async (updatedCart) => {
     } catch (error) {
       console.error('Error editing menu item:', error);
       displayMessage('Error editing menu item.');
+    }
+  };
+
+  const handleDeleteMenuItem = async (itemId) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/menu-items/${itemId}`);
+      if (response.status === 200) {
+        setMenuItems(menuItems.filter((item) => item._id !== itemId));
+        displayMessage('Menu item deleted successfully!');
+      } else {
+        displayMessage('Failed to delete menu item.');
+      }
+    } catch (error) {
+      console.error('Error deleting menu item:', error);
+      displayMessage('Error deleting menu item.');
     }
   };
 
@@ -326,7 +341,12 @@ const updateCartInDatabase = async (updatedCart) => {
                 </div>
               )}
               {(userRole === 'admin') &&
-                (<button onClick={() => handleEditMenuClick(item)}>Edit</button>) 
+                (
+                <>
+                <button onClick={() => handleEditMenuClick(item)}>Edit</button>
+                <button onClick={() => handleDeleteMenuItem(item._id)}>Delete</button>
+                </>
+                )
               }
             </div>
           ))}

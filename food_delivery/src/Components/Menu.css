@@ -64,9 +64,13 @@
   margin: 10px;
   font-family:'Courier New', Courier, monospace;
   border-radius: 5px;
+  color: #333;
   background-color: #ffffff;
 }
 
+.menu-item button:hover {
+  background-color: #218838;
+}
 /* Notification message styles */
 .notification {
   background-color: #28a745; /* Green background */
@@ -103,8 +107,9 @@
   font-size: 16px;
   font-weight: bold;
   font-family:'Courier New', Courier, monospace;
-  color: white;
-  background-color: #28a745; /* Green background for add button */
+  background-color: white;
+  color: #333;
+  /* background-color: #28a745; Green background for add button */
   border: none;
   border-radius: 8px;
   cursor: pointer;
