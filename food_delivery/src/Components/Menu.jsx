@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
 import './Menu.css';
@@ -7,93 +8,159 @@ import './Menu.css';
 const Menu = () => {
   const location = useLocation();
   const restaurant = location.state;
-  const { id } = useParams();
 
-  // Simulated menu data based on restaurant ID
-  const menuData = {
-    1: [
-      { id: 'RR1', name: 'Rayalaseema Chicken Curry', price: 'Rs. 150', image: '/rayalaseema_chicken_curry.jpg', description: 'A spicy and flavorful chicken curry that features tender pieces of chicken cooked in a rich blend of aromatic spices and herbs, reflecting the bold flavors of Rayalaseema.' },
-      { id: 'RR2', name: 'Spicy Rice', price: 'Rs. 120', image: '/spicy_rice.jpg', description: 'Fragrant rice tossed with a mix of spices and sautéed vegetables, offering a perfect balance of heat and flavor.' },
-      { id: 'RR3', name: 'Chili Chicken Fry', price: 'Rs. 180', image: '/chili_chicken_fry.jpg', description: 'Crispy fried chicken pieces marinated in a zesty chili sauce, garnished with fresh herbs.' },
-      { id: 'RR4', name: 'Fish Fry Delight', price: 'Rs. 200', image: '/fish_fry_delight.jpg', description: 'Fresh fish fillets seasoned with a blend of spices and deep-fried to golden perfection.' },
-      { id: 'RR5', name: 'Traditional Sweet', price: 'Rs. 80', image: '/traditional_sweet.jpg', description: 'A delightful dessert made from local ingredients.' },
-    ],
-    2: [
-      { id: 'ASH1', name: 'Spicy Andhra Chicken', price: 'Rs. 220', image: '/Spicy_andhra_chicken.jpg', description: 'A classic dish featuring marinated chicken cooked in a spicy, tangy sauce.' },
-      { id: 'ASH2', name: 'Andhra Thali', price: 'Rs. 250', image: '/Andhra_thali.jpg', description: 'A lavish platter that showcases the diversity of Andhra cuisine.' },
-      { id: 'ASH3', name: 'Vegetable Biryani', price: 'Rs. 180', image: '/Vegetable_biryani.jpg', description: 'Aromatic basmati rice cooked with a medley of fresh vegetables.' },
-      { id: 'ASH4', name: 'Andhra Fish Fry', price: 'Rs. 210', image: '/Andhra_fish_fry.jpg', description: 'Fresh fish marinated in a spicy and tangy blend, then pan-fried to achieve a crispy texture.' },
-      { id: 'ASH5', name: 'Andhra Special Roti', price: 'Rs. 90', image: '/Andhra_special_roti.jpg', description: 'Soft, handmade flatbreads perfect for scooping up curries.' },
-    ],
-    3: [
-      { id: 'TT1', name: 'Telangana Chicken Biryani', price: 'Rs. 230', image: '/Telangana_chicken_biryani.jpg', description: 'A rich and aromatic biryani made with marinated meat, layered with fragrant basmati rice and slow-cooked to perfection.' },
-      { id: 'TT2', name: 'Smoky Roti', price: 'Rs. 100', image: '/Smoky_roti.jpg', description: 'Soft, whole wheat flatbreads cooked on a traditional tandoor.' },
-      { id: 'TT3', name: 'Telangana Mutton Pulao', price: 'Rs. 150', image: '/Telangana_mutton_pulao.jpg', description: 'A flavorful rice dish cooked with an assortment of spices and fresh mutton.' },
-      { id: 'TT4', name: 'Charcoal Grilled Chicken', price: 'Rs. 250', image: '/Charcoal_grilled_chicken.jpg', description: 'Succulent chicken pieces marinated in a special blend of spices and grilled over charcoal for a smoky flavor.' },
-      { id: 'TT5', name: 'Paneer Tikka', price: 'Rs. 180', image: '/Paneer_tikka.jpg', description: 'Marinated cubes of paneer (Indian cottage cheese) grilled to perfection.' },
-    ],
-    4: [
-      { id: 'NK1', name: 'Nizam’s Biryani', price: 'Rs. 300', image: "/Nizam's_biryani.jpg", description: 'An exquisite biryani made with succulent meat, fragrant spices, and long-grain basmati rice.' },
-      { id: 'NK2', name: 'Kebabs Platter', price: 'Rs. 350', image: '/Kebabs_platter.jpg', description: 'A selection of assorted kebabs, marinated and grilled to perfection.' },
-      { id: 'NK3', name: 'Nizam’s Special Curry', price: 'Rs. 250', image: '/Nizams_special_curry.jpg', description: 'A rich and creamy curry featuring a blend of spices, meat, and traditional cooking techniques.' },
-      { id: 'NK4', name: 'Biryani Pulao', price: 'Rs. 280', image: '/biryani_pulao.jpg', description: 'A delightful fusion of biryani and pulao.' },
-      { id: 'NK5', name: 'Kheer (Dessert)', price: 'Rs. 100', image: '/kheer_dessert.jpg', description: 'A traditional Indian rice pudding made with milk, sugar, and flavored with cardamom.' },
-    ],
-    5: [
-      { id: 'RV1', name: 'Rythu Special Thali', price: 'Rs. 270', image: '/rythu_thali.jpg', description: 'A wholesome thali showcasing the best of vegetarian dishes.' },
-      { id: 'RV2', name: 'Vegetable Curry', price: 'Rs. 150', image: '/Vegetable_curry.jpg', description: 'A vibrant medley of seasonal vegetables cooked in a flavorful gravy.' },
-      { id: 'RV3', name: 'Bitter Gourd Fry', price: 'Rs. 140', image: '/bitter_guard_fry.jpg', description: 'A crispy and flavorful dish made from sliced bitter gourd.' },
-      { id: 'RV4', name: 'Dal Tadka', price: 'Rs. 120', image: '/dal_thadka.jpeg', description: 'Yellow lentils cooked with spices and topped with a tempering of garlic and cumin.' },
-      { id: 'RV5', name: 'Mixed Vegetable Salad', price: 'Rs. 80', image: '/mixed_vegetable_salad.jpg', description: 'A refreshing salad made with fresh seasonal vegetables.' },
-    ]
-    // ...Other restaurant data
-  };
-
-  const [menuItems, setMenuItems] = useState(menuData[id] || []);
+  const [menuItems, setMenuItems] = useState([]);
   const [cart, setCart] = useState(() => {
     const storedCart = localStorage.getItem('cart');
     return storedCart ? JSON.parse(storedCart) : [];
   });
   const [message, setMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
-  // Modal states for adding/editing menu items
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/menu-items/restaurant/${restaurant._id}`
+        );
+        // console.log(response.data); // Log the response to inspect the data
+        setMenuItems(response.data);
+        // console.log(response);
+        const restaurantDetails = response.data[0].restaurantId; // Adjust the path as needed
+        // console.log(restaurantDetails);
+        localStorage.setItem('restaurantDetails', JSON.stringify(restaurantDetails));
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
+    };
+
+    fetchMenuItems();
+  }, [restaurant._id]);
+
   const [isAddMenuModalOpen, setIsAddMenuModalOpen] = useState(false);
   const [isEditMenuModalOpen, setIsEditMenuModalOpen] = useState(false);
   const [newMenuItem, setNewMenuItem] = useState({
-    id: '',
     name: '',
     price: '',
     image: '',
     description: '',
+    restaurantId: restaurant._id,
   });
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
-
-  const handleAddToCart = (item) => {
-    const itemWithRestaurant = {
-      ...item,
-      restaurantName: restaurant.name,
-    };
-
-    setCart((prevCart) => {
-      const itemInCart = prevCart.find((cartItem) => cartItem.id === itemWithRestaurant.id);
-
+  const activeUser = localStorage.getItem('user');
+  const parsedUser = JSON.parse(activeUser);
+  // console.log(parsedUser.role);
+  const userRole = parsedUser.role;
+  // console.log(userRole);
+  // console.log(typeof(userRole));
+  const handleAddToCart = async (item) => {
+    try {
+      const itemWithRestaurant = { ...item, restaurantName: restaurant.name };
+  
+      const itemInCart = cart.find((cartItem) => cartItem._id === itemWithRestaurant._id);
+  
       let updatedCart;
       if (itemInCart) {
-        updatedCart = prevCart.map((cartItem) =>
-          cartItem.id === itemWithRestaurant.id
+        updatedCart = cart.map((cartItem) =>
+          cartItem._id === itemWithRestaurant._id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        updatedCart = [...prevCart, { ...itemWithRestaurant, quantity: 1 }];
+        updatedCart = [...cart, { ...itemWithRestaurant, quantity: 1 }];
       }
-
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
+  
+      setCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
       displayMessage(`${itemWithRestaurant.name} added to cart!`);
-      return updatedCart;
-    });
+  
+      if (updatedCart.length === 1) {
+        await postCartToDatabase(updatedCart); // Create new cart in DB
+      } else {
+        await updateCartInDatabase(updatedCart); // Update existing cart in DB
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
   };
+  
+
+  const postCartToDatabase = async (cartItems) => {
+    try {
+      const user = localStorage.getItem('user');
+      if (!user) {
+        throw new Error('User is not logged in');
+      }
+  
+      const parsedUser = JSON.parse(user);
+      if (!parsedUser || !parsedUser.id) {
+        throw new Error('Invalid user data');
+      }
+  
+      if (!cartItems || cartItems.length === 0) {
+        throw new Error('Cart items are required');
+      }
+  
+      const userId = parsedUser.id; // Retrieve userId from local storage
+  
+      const response = await axios.post('http://localhost:5000/api/cart/add', {
+        userId,
+        items: cartItems.map(item => ({
+          menuItemId: item._id,
+          quantity: item.quantity,
+        })),
+      });
+  
+      console.log('Cart created:', response.data);
+    } catch (error) {
+      console.error('Error creating cart in database:', error);
+    }
+  };
+
+  // Update cart record in the database
+const updateCartInDatabase = async (updatedCart) => {
+  try {
+    const user = localStorage.getItem("user");
+    const parsedUser = JSON.parse(user);
+    const userId = parsedUser?.id;
+
+    if (!userId) {
+      throw new Error("User ID is not available in localStorage.");
+    }
+
+    // Fetch existing cart from the database
+    const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+    const existingCart = response.data;
+
+    // Prepare updated cart items
+    const mergedCartItems = updatedCart.map((cartItem) => {
+      const existingItem = existingCart.items.find(
+        (item) => item.menuItemId === cartItem._id
+      );
+      return {
+        menuItemId: cartItem._id,
+        quantity: existingItem
+          ? cartItem.quantity // Use the new quantity from the state
+          : cartItem.quantity,
+      };
+    });
+
+    // Update the cart in the database
+    await axios.put(`http://localhost:5000/api/cart/update/${existingCart._id}`, {
+      userId,
+      items: mergedCartItems,
+    });
+
+    console.log("Cart updated in the database.");
+    // displayMessage(`Cart Updated.`);
+  } catch (error) {
+    console.error("Error updating cart in the database:", error);
+  }
+};
+
+  
+  
 
   const displayMessage = (msg) => {
     setMessage(msg);
@@ -102,47 +169,47 @@ const Menu = () => {
     }, 3000);
   };
 
-  // Get quantity of the item in cart
   const getItemQuantity = (itemId) => {
-    const itemInCart = cart.find((cartItem) => cartItem.id === itemId);
+    const itemInCart = cart.find((cartItem) => cartItem._id === itemId);
     return itemInCart ? itemInCart.quantity : 0;
   };
 
-  const filteredMenuItems = menuItems.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredMenuItems = Array.isArray(menuItems)
+    ? menuItems.filter((item) =>
+        item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
-  // Handle increasing the quantity
   const handleIncreaseQuantity = (itemId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.map((cartItem) =>
-        cartItem.id === itemId
+        cartItem._id === itemId
           ? { ...cartItem, quantity: cartItem.quantity + 1 }
           : cartItem
       );
       localStorage.setItem('cart', JSON.stringify(updatedCart));
+      updateCartInDatabase(updatedCart); // Call the API to update the database
       return updatedCart;
     });
   };
 
-  // Handle decreasing the quantity
   const handleDecreaseQuantity = (itemId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart
         .map((cartItem) =>
-          cartItem.id === itemId
+          cartItem._id === itemId
             ? { ...cartItem, quantity: Math.max(cartItem.quantity - 1, 0) }
             : cartItem
         )
         .filter((cartItem) => cartItem.quantity > 0); // Remove item if quantity reaches 0
       localStorage.setItem('cart', JSON.stringify(updatedCart));
+      updateCartInDatabase(updatedCart); // Call the API to update the database
       return updatedCart;
     });
   };
 
-  // Open add/edit modal
   const handleAddMenuClick = () => {
-    setNewMenuItem({ id: '', name: '', price: '', image: '', description: '' });
+    setNewMenuItem({ name: '', price: '', image: '', description: '' });
     setIsAddMenuModalOpen(true);
   };
 
@@ -165,28 +232,88 @@ const Menu = () => {
     setNewMenuItem({ ...newMenuItem, [name]: value });
   };
 
-  const handleAddNewMenuItem = () => {
-    const initials = restaurant.name
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .join('');
-    const newId = `${initials}${menuItems.length + 1}`; // Generate new ID based on initials
-    const updatedMenuItems = [...menuItems, { ...newMenuItem, id: newId }];
-    setMenuItems(updatedMenuItems);
-    setIsAddMenuModalOpen(false);
+  const handleAddNewMenuItem = async () => {
+    const newMenuItemData = {
+      name: newMenuItem.name,
+      price: newMenuItem.price,
+      image: newMenuItem.image,
+      description: newMenuItem.description,
+      restaurantId: restaurant._id,
+    };
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/menu-items',
+        newMenuItemData
+      );
+      if (response.status === 201) {
+        setMenuItems([...menuItems, newMenuItemData]);
+        setIsAddMenuModalOpen(false);
+        displayMessage('Menu item added successfully!');
+      } else {
+        displayMessage('Failed to add menu item.');
+      }
+    } catch (error) {
+      console.error('Error adding menu item:', error);
+      displayMessage('Error adding menu item.');
+    }
   };
 
-  const handleEditMenuItem = () => {
-    const updatedMenuItems = menuItems.map((item) =>
-      item.id === selectedMenuItem.id ? newMenuItem : item
-    );
-    setMenuItems(updatedMenuItems);
-    setIsEditMenuModalOpen(false);
+  const handleEditMenuItem = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/menu-items/${selectedMenuItem._id}`,
+        newMenuItem
+      );
+      if (response.status === 200) {
+        const updatedMenuItems = menuItems.map((item) =>
+          item._id === selectedMenuItem._id ? { ...item, ...newMenuItem } : item
+        );
+        setMenuItems(updatedMenuItems);
+        setIsEditMenuModalOpen(false);
+        displayMessage('Menu item updated successfully!');
+      } else {
+        displayMessage('Failed to update menu item.');
+      }
+    } catch (error) {
+      console.error('Error editing menu item:', error);
+      displayMessage('Error editing menu item.');
+    }
+  };
+
+  const handleDeleteMenuItem = async (itemId) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/menu-items/${itemId}`);
+      if (response.status === 200) {
+        setMenuItems(menuItems.filter((item) => item._id !== itemId));
+        displayMessage('Menu item deleted successfully!');
+      } else {
+        displayMessage('Failed to delete menu item.');
+      }
+    } catch (error) {
+      console.error('Error deleting menu item:', error);
+      displayMessage('Error deleting menu item.');
+    }
+  };
+
+  const onLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('cart');
+    alert('Logout Successfull.');
+    navigate('/');
   };
 
   return (
     <>
-      <Header user = {localStorage.getItem('user')} cartCount={cart.length} showSearchBar={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Header
+        user={localStorage.getItem('user')}
+        cartCount={cart && cart.length}
+        showSearchBar={true}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onLogout={onLogout}
+      />
 
       <div className="header-div">
         <h2>{restaurant.name} Menu</h2>
@@ -196,71 +323,117 @@ const Menu = () => {
 
         <div className="menu-list">
           {filteredMenuItems.map((item) => (
-            <div key={item.id} className="menu-item">
+            <div key={item._id} className="menu-item">
               <img src={item.image} alt={item.name} className="menu-image" />
               <h4>{item.name}</h4>
               <p>{item.description}</p>
               <p><b>{item.price}</b></p>
 
-              {/* Conditionally render Add to Cart button if quantity is 0 */}
-              {getItemQuantity(item.id) === 0 && (
+              {getItemQuantity(item._id) === 0 && (
                 <button onClick={() => handleAddToCart(item)}>Add to Cart</button>
               )}
 
-              {/* Display quantity and + / - buttons when item is in the cart */}
-              {getItemQuantity(item.id) > 0 && (
+              {getItemQuantity(item._id) > 0 && (
                 <div className="item-quantity">
-                  <button onClick={() => handleDecreaseQuantity(item.id)}>-</button>
-                  <span> Quantity: {getItemQuantity(item.id)} </span>
-                  <button onClick={() => handleIncreaseQuantity(item.id)}>+</button>
+                  <button onClick={() => handleDecreaseQuantity(item._id)}>-</button>
+                  <span> Quantity: {getItemQuantity(item._id)} </span>
+                  <button onClick={() => handleIncreaseQuantity(item._id)}>+</button>
                 </div>
               )}
-
-              <button onClick={() => handleEditMenuClick(item)}>Edit</button>
+              {(userRole === 'admin') &&
+                (
+                <>
+                <button onClick={() => handleEditMenuClick(item)}>Edit</button>
+                <button onClick={() => handleDeleteMenuItem(item._id)}>Delete</button>
+                </>
+                )
+              }
             </div>
           ))}
-
+          {(userRole === 'admin') && (
           <div className="add-menu-card">
             <button className="add-menu-button" onClick={handleAddMenuClick}>
               + Add New Menu Item
             </button>
-          </div>
+          </div>) }
         </div>
       </div>
 
-      {/* Modal for adding a new menu item */}
       {isAddMenuModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Add New Menu Item</h2>
             <label>Name:</label>
-            <input type="text" name="name" value={newMenuItem.name} onChange={handleMenuInputChange} placeholder="Menu Item Name" />
+            <input
+              type="text"
+              name="name"
+              value={newMenuItem.name}
+              onChange={handleMenuInputChange}
+              placeholder="Menu Item Name"
+            />
             <label>Price:</label>
-            <input type="text" name="price" value={newMenuItem.price} onChange={handleMenuInputChange} placeholder="Price" />
+            <input
+              type="text"
+              name="price"
+              value={newMenuItem.price}
+              onChange={handleMenuInputChange}
+              placeholder="Price"
+            />
             <label>Image URL:</label>
-            <input type="text" name="image" value={newMenuItem.image} onChange={handleMenuInputChange} placeholder="Image URL" />
+            <input
+              type="text"
+              name="image"
+              value={newMenuItem.image}
+              onChange={handleMenuInputChange}
+              placeholder="Image URL"
+            />
             <label>Description:</label>
-            <textarea name="description" value={newMenuItem.description} onChange={handleMenuInputChange} placeholder="Description"></textarea>
-            <button onClick={handleAddNewMenuItem}>Add</button>
+            <textarea
+              name="description"
+              value={newMenuItem.description}
+              onChange={handleMenuInputChange}
+              placeholder="Description"
+            ></textarea>
+
+            <button onClick={handleAddNewMenuItem}>Add Menu Item</button>
             <button onClick={handleCloseAddMenuModal}>Close</button>
           </div>
         </div>
       )}
 
-      {/* Modal for editing a menu item */}
       {isEditMenuModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Edit Menu Item</h2>
             <label>Name:</label>
-            <input type="text" name="name" value={newMenuItem.name} onChange={handleMenuInputChange} />
+            <input
+              type="text"
+              name="name"
+              value={newMenuItem.name}
+              onChange={handleMenuInputChange}
+            />
             <label>Price:</label>
-            <input type="text" name="price" value={newMenuItem.price} onChange={handleMenuInputChange} />
+            <input
+              type="text"
+              name="price"
+              value={newMenuItem.price}
+              onChange={handleMenuInputChange}
+            />
             <label>Image URL:</label>
-            <input type="text" name="image" value={newMenuItem.image} onChange={handleMenuInputChange} />
+            <input
+              type="text"
+              name="image"
+              value={newMenuItem.image}
+              onChange={handleMenuInputChange}
+            />
             <label>Description:</label>
-            <textarea name="description" value={newMenuItem.description} onChange={handleMenuInputChange}></textarea>
-            <button onClick={handleEditMenuItem}>Save Changes</button>
+            <textarea
+              name="description"
+              value={newMenuItem.description}
+              onChange={handleMenuInputChange}
+            ></textarea>
+
+            <button onClick={handleEditMenuItem}>Update Menu Item</button>
             <button onClick={handleCloseEditMenuModal}>Close</button>
           </div>
         </div>

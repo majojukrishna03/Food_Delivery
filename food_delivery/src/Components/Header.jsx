@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
 const Header = ({ 
@@ -10,6 +10,25 @@ const Header = ({
   user, 
   onLogout 
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Redirect to login if user is not logged in and the path is '/cart'
+    if (location.pathname === '/cart' && !user) {
+      navigate('/login');
+    }
+  }, [location.pathname, user, navigate]);
+
+  const handleHomeClick = (e) => {
+    e.preventDefault(); // Prevent default link behavior
+    if (user) {
+      navigate('/restaurants'); // Navigate to restaurants if user is logged in
+    } else {
+      navigate('/'); // Navigate to home if no user is logged in
+    }
+  };
+
   return (
     <header className="Header">
       <div className="logo">
@@ -27,8 +46,14 @@ const Header = ({
       )}
       <nav>
         <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
+          <li>
+            <a href="/" onClick={handleHomeClick}>
+              Home
+            </a>
+          </li>
+          {location.pathname !== '/about' && (
+            <li><Link to="/about">About</Link></li>
+          )}
           <li>
             <Link to="/cart">
               Cart {cartCount > 0 && <span>({cartCount})</span>}
@@ -36,19 +61,25 @@ const Header = ({
           </li>
           {user ? (
             <>
-              <li>
-                <Link to="/" onClick={onLogout}>
-                  Logout
-                </Link>
+                <li>
+                  <Link to="/" onClick={onLogout}>
+                    Logout
+                  </Link>
                 </li>
+              
+              <li>
+                <Link to="/user/orders">
+                  My Orders
+                </Link>
+              </li>
             </>
           ) : (
             <>
               <li><Link to="/login">Login</Link></li>
               <li><Link to="/register">Register</Link></li>
+              <li>Hyderabad</li>
             </>
           )}
-          <li>Hyderabad</li>
         </ul>
       </nav>
     </header>

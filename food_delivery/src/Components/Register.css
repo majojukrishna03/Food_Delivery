@@ -1,0 +1,115 @@
+/* Register.css */
+
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    background: linear-gradient(135deg, #f9d0bc, #fff3f3);
+    color: #fff;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .register-container h2 {
+    font-size: 2.5rem;
+    /* margin-bottom: 1rem; */
+    font-weight: bold;
+    text-transform: uppercase;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  form input {
+    width: 90%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, box-shadow 0.2s;
+  }
+  
+  form input:focus {
+    background: #fff;
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.6);
+    outline: none;
+  }
+  
+  .register-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #148c5e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .register-button:hover {
+    background-color: #148c5e;
+    transform: scale(1.05);
+  }
+  
+  .success-message {
+    color: #4caf50;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .error-message {
+    color: #fd2718;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .register-container h2 {
+      font-size: 2rem;
+    }
+  
+    form {
+      padding: 1.5rem;
+    }
+  
+    form input {
+      font-size: 0.9rem;
+    }
+  
+    .register-button {
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

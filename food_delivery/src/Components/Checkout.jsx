@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import axios from 'axios'; // Import axios for making HTTP requests
 import './Checkout.css';
 import Header from './Header';
 import Footer from './Footer';
+
+const activeUser = localStorage.getItem('user');
+const parsedUser = JSON.parse(activeUser);
+const restaurantDetails = localStorage.getItem('restaurantDetails');
+const parsedRestaurantDetails = JSON.parse(restaurantDetails);
 
 const Checkout = () => {
   const [cart, setCart] = useState([]);
@@ -22,8 +28,15 @@ const Checkout = () => {
   });
   const [errors, setErrors] = useState({});
   const [shippingError, setShippingError] = useState(''); // State for shipping validation error
-  
+
   const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    if (!parsedUser) {
+      // If user is not logged in, redirect to the login page
+      navigate('/login');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -32,7 +45,10 @@ const Checkout = () => {
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => {
-      const price = parseInt(item.price.replace('Rs. ', ''));
+      const price = typeof item.price === 'string' 
+        ? parseInt(item.price.replace('Rs. ', ''), 10)
+        : item.price; // Use item.price directly if it's already a number
+  
       return total + (price * item.quantity);
     }, 0);
   };
@@ -105,46 +121,87 @@ const Checkout = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Check if all shipping fields are filled
     if (Object.values(shippingInfo).some(field => !field)) {
       setShippingError('Please fill in all shipping information fields.');
-      return; // Prevent proceeding to payment
+      return;
     }
-    
-    // Proceed to open payment modal
-    setIsPaymentModalOpen(true);
+
+    const orderData = {
+      userId: parsedUser.id, 
+      restaurantId: parsedRestaurantDetails._id, 
+      items: cart.map(item => ({
+        menuItemId: item._id,
+        quantity: item.quantity,
+        itemAmount: item.price * item.quantity,
+      })),
+      shippingAddress: `${shippingInfo.name}, ${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.postalCode}, ${shippingInfo.phone}`,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/orders', orderData);
+
+      if (response.status === 201) {
+        alert('Your order has been created.');
+      }
+
+      setIsPaymentModalOpen(true);
+    } catch (error) {
+      console.error('Error creating order:', error);
+      alert('An error occurred while checking out your order. Please try again.');
+    }
   };
 
-  const handlePaymentSubmit = (e) => {
+  const handlePaymentSubmit = async (e) => {
     e.preventDefault();
     if (Object.values(errors).some(error => error)) {
       alert('Please fix the errors in the payment form.');
       return;
     }
 
-    // Alert for successful payment
-    alert('Payment successful! Your order has been placed.');
+    try {
+      const response = await axios.get(`http://localhost:5000/api/orders/user/latest/${parsedUser.id}`);
+      const OrderDetails = response.data;
+      const OrderId = OrderDetails._id;
+      const Amount = OrderDetails.totalAmount;
 
-    // Clear the cart and shipping details
+      const paymentData = {
+        userId : parsedUser.id,
+        orderId : OrderId,
+        amount : Amount,
+      };
+
+      const paymentResponse = await axios.post('http://localhost:5000/api/payments', paymentData);
+      // console.log(paymentResponse)
+
+      if (paymentResponse.status === 201) {
+        alert('Payment successful! Your order has been placed.');
+        localStorage.removeItem('cart');
+        await axios.delete(`http://localhost:5000/api/cart/clear/${parsedUser.id}`);
+        setCart([]);
+        setIsPaymentModalOpen(false);
+        navigate('/restaurants');
+      } else {
+        alert('There was an issue processing your order.');
+      }
+    } catch (error) {
+      console.error('Error submitting payment:', error);
+      alert('An error occurred while placing your order. Please try again.');
+    }
+  };
+
+  const onLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     localStorage.removeItem('cart');
-    setCart([]);
-    setShippingInfo({
-      name: '',
-      address: '',
-      city: '',
-      postalCode: '',
-      phone: '',
-    });
-
-    // Navigate to the home page
-    navigate('/'); // Adjust the path to your home page
+    alert('Logout Successful.');
+    navigate('/');
   };
 
   return (
     <>
-      <Header cartCount={cart.reduce((count, item) => count + item.quantity, 0)} />
+      <Header onLogout={onLogout} user={localStorage.getItem('user')} cartCount={cart.length} />
       <div className='background'>
         <div className='checkout-container'>
           <h2>Checkout</h2>
@@ -155,7 +212,7 @@ const Checkout = () => {
               <div className="checkout-items">
                 <h3>Your Items</h3>
                 {cart.map(item => (
-                  <div key={item.id} className="checkout-item">
+                  <div key={item._id} className="checkout-item">
                     <img src={item.image} alt={item.name} className="checkout-item-image" />
                     <div className="checkout-item-details">
                       <h4>{item.name}</h4>
@@ -211,73 +268,58 @@ const Checkout = () => {
                   onChange={handleChange}
                   required
                 />
-                {shippingError && <span className="error">{shippingError}</span>} {/* Display shipping error */}
-                <button type="submit" className="checkout-button">
-                  Continue to Payment
-                </button>
+                <button type="submit">Proceed to Payment</button>
+                {shippingError && <p className="error-message">{shippingError}</p>}
               </form>
+
+              {isPaymentModalOpen && (
+                <div className="payment-modal">
+                  <form onSubmit={handlePaymentSubmit}>
+                    <h3>Payment Information</h3>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      placeholder="Card Number"
+                      value={paymentInfo.cardNumber}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.cardNumber && <p className="error-message">{errors.cardNumber}</p>}
+                    <input
+                      type="text"
+                      name="cardHolder"
+                      placeholder="Card Holder Name"
+                      value={paymentInfo.cardHolder}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.cardHolder && <p className="error-message">{errors.cardHolder}</p>}
+                    <input
+                      type="text"
+                      name="expiryDate"
+                      placeholder="Expiry Date (MM/YY)"
+                      value={paymentInfo.expiryDate}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.expiryDate && <p className="error-message">{errors.expiryDate}</p>}
+                    <input
+                      type="text"
+                      name="cvv"
+                      placeholder="CVV"
+                      value={paymentInfo.cvv}
+                      onChange={handlePaymentChange}
+                      required
+                    />
+                    {errors.cvv && <p className="error-message">{errors.cvv}</p>}
+                    <button type="submit">Submit Payment</button>
+                  </form>
+                </div>
+              )}
             </>
           )}
         </div>
       </div>
-
-      {/* Payment Modal */}
-      {isPaymentModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Payment Information</h2>
-            <form onSubmit={handlePaymentSubmit}>
-              <label>Card Number:</label>
-              <input
-                type="text"
-                name="cardNumber"
-                value={paymentInfo.cardNumber}
-                onChange={handlePaymentChange}
-                placeholder="Enter your card number"
-                required
-              />
-              {errors.cardNumber && <span className="error">{errors.cardNumber}</span>}
-
-              <label>Card Holder Name:</label>
-              <input
-                type="text"
-                name="cardHolder"
-                value={paymentInfo.cardHolder}
-                onChange={handlePaymentChange}
-                placeholder="Enter card holder's name"
-                required
-              />
-              {errors.cardHolder && <span className="error">{errors.cardHolder}</span>}
-
-              <label>Expiry Date:</label>
-              <input
-                type="text"
-                name="expiryDate"
-                value={paymentInfo.expiryDate}
-                onChange={handlePaymentChange}
-                placeholder="MM/YY"
-                required
-              />
-              {errors.expiryDate && <span className="error">{errors.expiryDate}</span>}
-
-              <label>CVV:</label>
-              <input
-                type="text"
-                name="cvv"
-                value={paymentInfo.cvv}
-                onChange={handlePaymentChange}
-                placeholder="Enter CVV"
-                required
-              />
-              {errors.cvv && <span className="error">{errors.cvv}</span>}
-
-              <button type="submit">Pay and Place the order</button>
-              <button type="button" onClick={() => setIsPaymentModalOpen(false)}>Close</button>
-            </form>
-          </div>
-        </div>
-      )}
-
       <Footer />
     </>
   );

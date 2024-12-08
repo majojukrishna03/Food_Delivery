@@ -1,0 +1,104 @@
+/* Home.css */
+
+.userhome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh; /* Adjusted for less scrolling */
+    background: linear-gradient(135deg, #f9d0bc, #fff3f3);
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  
+  .userhome-container hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .userhome-container hero-content h2 {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .userhome-container hero-content p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+  
+  .userhome-container cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .userhome-container cta-button {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: #148c5e;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .userhome-container cta-button:hover {
+    background-color: #105bb5;
+    transform: scale(1.05);
+  }
+  
+  .userhome-container cta-button:active {
+    transform: scale(0.95);
+    background-color: #0d4e91;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .userhome-container hero-content h2 {
+      font-size: 2rem;
+    }
+  
+    .userhome-container hero-content p {
+      font-size: 1rem;
+    }
+  
+    .userhome-container cta-buttons {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+  
+    .userhome-container cta-button {
+      width: 100%; /* Buttons take full width on smaller screens */
+      text-align: center;
+    }
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

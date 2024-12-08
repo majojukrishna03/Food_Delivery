@@ -6,7 +6,7 @@ footer {
     font-family: 'Arial', sans-serif;
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.064); /* Adds a shadow effect */
     border-top: 3px solid #ff7f50; /* Separation line on top */
-    /* width: 100%; Ensures footer spans the entire width */
+    bottom: 0;
 }
 
 footer h3 {
@@ -24,11 +24,11 @@ footer ul {
 
 .footer-links a {
     text-decoration: none;
-    color: #5a189a;
+    color: #148c5e;
 }
 
 .footer-links a:hover {
-    color: #b59cc9; /* Hover color */
+    color: #148c5e; /* Hover color */
 }
 
 footer h3, footer ul {

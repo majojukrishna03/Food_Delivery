@@ -7,7 +7,7 @@
     padding: 20px; /* Adds space around the entire list */
     flex-wrap: wrap; /* Allows cards to wrap to the next row if needed */
     gap: 20px; /* Adds spacing between the cards */
-    background-color: #96b6ef;
+    background: linear-gradient(135deg, #f9d0bc, #fff3f3);
     border-top: 3px solid #ff7f50;
   }
 
@@ -15,6 +15,12 @@
   margin: 10px;
   font-family:'Courier New', Courier, monospace;
   border-radius: 5px;
+  color: #333;
+  background-color: white;
+}
+
+.restaurant-list button:hover {
+  background-color: #218838;
 }
   
   /* Individual restaurant card */
@@ -26,7 +32,7 @@
     max-width: 350px; /* Sets a maximum width for each card */
     text-align: center; /* Centers the text inside the card */
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transitions for hover effects */
-    background-color: #afbcc7;
+    background-color: #f4c099;
   }
   
   /* Hover effect for expanding the card */

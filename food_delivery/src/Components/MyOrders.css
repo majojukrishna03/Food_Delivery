@@ -1,0 +1,123 @@
+/* General styles for the container */
+.MyOrders {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Heading styles */
+  .MyOrders h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #007BFF;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Grid layout for orders */
+  .orders-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+  }
+  
+  /* Individual order card styles */
+  .order-item {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    overflow: hidden;
+  }
+  
+  .order-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Order heading styles */
+  .order-item h3 {
+    background: linear-gradient(45deg, #007BFF, #00C6FF);
+    color: #fff;
+    padding: 15px;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  
+  /* Order details styles */
+  .order-item p {
+    margin: 15px 20px;
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  /* Items list */
+  .order-item h4 {
+    margin: 20px 20px 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .order-item ul {
+    list-style: none;
+    margin: 0 20px 20px;
+    padding: 0;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+  }
+  
+  .order-item ul li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  .order-item ul li span {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Error message */
+  .MyOrders-error {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #E74C3C;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+  
+  /* Placeholder message for no orders */
+  .MyOrders p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    margin-top: 30px;
+  }
+  
+  /* Media query for smaller screens */
+  @media (max-width: 768px) {
+    .order-item p,
+    .order-item ul li {
+      font-size: 0.9rem;
+    }
+  
+    .MyOrders h1 {
+      font-size: 2rem;
+    }
+  }
+  

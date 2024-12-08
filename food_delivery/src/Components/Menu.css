@@ -4,7 +4,7 @@
 .header-div {
   text-align: center;
   border-top: 3px solid #ff7f50; /* Matches border style */
-  background-color: #96b6ef; /* Same background as RestaurantList */
+  background: linear-gradient(135deg, #f9d0bc, #fff3f3);
 }
 
 /* Container that holds all menu item cards */
@@ -14,7 +14,7 @@
   padding: 20px; /* Adds space around the entire list */
   flex-wrap: wrap; /* Allows cards to wrap to the next row if needed */
   gap: 20px; /* Adds spacing between the cards */
-  background-color: #96b6ef; /* Same background as RestaurantList */
+  background: linear-gradient(135deg, #f9d0bc, #fff3f3);
 }
 
 /* Individual menu item card */
@@ -26,7 +26,7 @@
   max-width: 350px; /* Sets a maximum width for each card */
   text-align: center; /* Centers the text inside the card */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transitions for hover effects */
-  background-color: #afbcc7; /* Same background as restaurant cards */
+  background-color: #f4c099; /* Same background as restaurant cards */
 }
 
 /* Hover effect for expanding the menu item card */
@@ -64,9 +64,13 @@
   margin: 10px;
   font-family:'Courier New', Courier, monospace;
   border-radius: 5px;
+  color: #333;
   background-color: #ffffff;
 }
 
+.menu-item button:hover {
+  background-color: #218838;
+}
 /* Notification message styles */
 .notification {
   background-color: #28a745; /* Green background */
@@ -103,8 +107,9 @@
   font-size: 16px;
   font-weight: bold;
   font-family:'Courier New', Courier, monospace;
-  color: white;
-  background-color: #28a745; /* Green background for add button */
+  background-color: white;
+  color: #333;
+  /* background-color: #28a745; Green background for add button */
   border: none;
   border-radius: 8px;
   cursor: pointer;
