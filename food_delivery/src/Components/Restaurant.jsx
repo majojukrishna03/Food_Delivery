@@ -81,12 +81,35 @@ const Restaurant = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (isEditModalOpen) {
-      setSelectedRestaurant({ ...selectedRestaurant, [name]: value });
+  
+    if (name.startsWith('timings.')) {
+      const field = name.split('.')[1]; // Extract "openingTime" or "closingTime"
+      if (isEditModalOpen) {
+        setSelectedRestaurant({
+          ...selectedRestaurant,
+          timings: {
+            ...selectedRestaurant.timings,
+            [field]: value,
+          },
+        });
+      } else {
+        setNewRestaurant({
+          ...newRestaurant,
+          timings: {
+            ...newRestaurant.timings,
+            [field]: value,
+          },
+        });
+      }
     } else {
-      setNewRestaurant({ ...newRestaurant, [name]: value });
+      if (isEditModalOpen) {
+        setSelectedRestaurant({ ...selectedRestaurant, [name]: value });
+      } else {
+        setNewRestaurant({ ...newRestaurant, [name]: value });
+      }
     }
   };
+  
 
   const handleAddNewRestaurant = async () => {
     try {
@@ -164,6 +187,7 @@ const Restaurant = () => {
             <img src={restaurant.image} alt={restaurant.name} className="image" />
             <h3>{restaurant.name}</h3>
             <p>{restaurant.description}</p>
+            <p>Timings : {restaurant.timings.openingTime} - {restaurant.timings.closingTime}</p>
             <p>Rating: {restaurant.rating}</p>
             <button onClick={() => handleViewMenu(restaurant)}>View Menu</button>
             {user?.role === 'admin' && (

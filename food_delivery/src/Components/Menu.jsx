@@ -325,9 +325,11 @@ const updateCartInDatabase = async (updatedCart) => {
           {filteredMenuItems.map((item) => (
             <div key={item._id} className="menu-item">
               <img src={item.image} alt={item.name} className="menu-image" />
-              <h4>{item.name}</h4>
-              <p>{item.description}</p>
-              <p><b>{item.price}</b></p>
+              <div classname="menu-details">
+                <h4>{item.name}</h4>
+                <p>{item.description}</p>
+                <p><b>{item.price}</b></p>
+              </div>
 
               {getItemQuantity(item._id) === 0 && (
                 <button onClick={() => handleAddToCart(item)}>Add to Cart</button>

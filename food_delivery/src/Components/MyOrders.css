@@ -103,7 +103,6 @@
   
   /* Placeholder message for no orders */
   .MyOrders p {
-    text-align: center;
     font-size: 1.2rem;
     color: #777;
     margin-top: 30px;

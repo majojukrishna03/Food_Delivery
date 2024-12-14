@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
+const userDetails = localStorage.getItem('user');
+// console.log(userDetails);
+const parsedUser = JSON.parse(userDetails)
 const Header = ({ 
   cartCount, 
   showSearchBar, 
@@ -66,12 +69,19 @@ const Header = ({
                     Logout
                   </Link>
                 </li>
-              
-              <li>
-                <Link to="/user/orders">
-                  My Orders
-                </Link>
-              </li>
+                {parsedUser.role !== 'admin' ? (
+                  <li>
+                    <Link to="/user/orders">
+                      My Orders
+                    </Link>
+                  </li>
+                ) : (
+                  <li>
+                    <Link to="/admin/orders">
+                      Orders
+                    </Link>
+                  </li>
+                )}
             </>
           ) : (
             <>

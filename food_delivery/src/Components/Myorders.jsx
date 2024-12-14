@@ -10,7 +10,8 @@ const MyOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  const userDetails = localStorage.getItem('user')
+  const parsedUser = JSON.parse(userDetails)
   const fetchOrders = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user')); // Retrieve user details from localStorage
@@ -21,8 +22,19 @@ const MyOrders = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:5000/api/orders/user/${user.id}`);
-      console.log(response);
+      const isAdmin = user.role === 'admin';
+
+      // Fetch orders based on user role
+      let response;
+      if (isAdmin) {
+        // Admin fetches all orders
+        response = await axios.get('http://localhost:5000/api/orders');
+        console.log(response);
+      } else {
+        // User fetches only their orders
+        response = await axios.get(`http://localhost:5000/api/orders/user/${user.id}`);
+      }
+
       setOrders(response.data);
       setLoading(false);
     } catch (err) {
@@ -37,7 +49,11 @@ const MyOrders = () => {
   }, []);
 
   if (loading) {
-    return <div className="MyOrders">Loading your orders...</div>;
+    return (
+      <div className="MyOrders">
+        {parsedUser.role === 'admin' ? 'Loading all orders...' : 'Loading your orders...'}
+      </div>
+    );
   }
 
   if (error) {
@@ -52,36 +68,39 @@ const MyOrders = () => {
     navigate('/');
   };
 
-
   return (
     <>
-    <Header onLogout = {onLogout} user={localStorage.getItem('user')} token={localStorage.getItem('token')} />
-    <div className="MyOrders">
-      <h1>My Orders</h1>
-      {orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : (
-        <ul className="orders-list">
-          {orders.map((order) => (
-            <li key={order._id} className="order-item">
-              <h3>Order #{order._id}</h3>
-              <p><strong>Restaurant:</strong> {order.restaurantId.name}</p>
-              <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}</p>
-              <p><strong>Total Price:</strong> ₹{order.totalAmount}</p>
-              <h4>Items:</h4>
-              <ul>
-                {order.items.map((item) => (
-                  <li key={item.menuItemId._id}>
-                    {item.menuItemId.name} - {item.quantity} x ₹{item.menuItemId.price}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-    <Footer/>
+      <Header onLogout={onLogout} user={localStorage.getItem('user')} token={localStorage.getItem('token')} />
+      <div className="MyOrders">
+      {parsedUser.role === 'admin' ? <h1>All Orders</h1> : <h1>My Orders</h1>}
+        {orders.length === 0 ? (
+          <p>No orders found.</p>
+        ) : (
+          <ul className="orders-list">
+            {orders.map((order) => (
+              <li key={order._id} className="order-item">
+                <h3>Order #{order._id}</h3>
+                <p><strong>Restaurant:</strong> {order.restaurantId.name}</p>
+                <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+                <p><strong>Total Price:</strong> ₹{order.totalAmount}</p>
+                {/* Display User ID if Admin */}
+                {parsedUser.role === 'admin' && (
+                  <p><strong>User ID:</strong> {order.userId}</p>
+                )}
+                <h4>Items:</h4>
+                <ul>
+                  {order.items.map((item) => (
+                    <li key={item.menuItemId._id}>
+                      {item.menuItemId.name} - {item.quantity} x ₹{item.menuItemId.price}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <Footer />
     </>
   );
 };
